@@ -9,8 +9,9 @@ public class AgentData
 {
     public string state;
     public int r0 = 3;
-    public float time = 20f; //120f
+    public float time = 120f;
     public int age = 20;
+    public bool isDead = false;
 }
 
 public class AgentController : MonoBehaviour
@@ -62,13 +63,36 @@ public class AgentController : MonoBehaviour
                 agent.r0 -= 1;
                 SimulationController.sick += 1;
                 SimulationController.healthy -= 1;
+                ProbabilityDeath();
             }
         }
     }
 
-    Color GetColorRGBA(string hex_color){
+    Color GetColorRGBA(string hex_color)
+    {
         Color new_color;
         ColorUtility.TryParseHtmlString(hex_color, out new_color);
         return new_color;
+    }
+
+    void ProbabilityDeath()
+    {
+        float percentage = 0.0f;
+        for(int i=0; i<= 6; i++){
+            if((data.age >= SimulationController.items[i]["min"]) && (data.age <= SimulationController.items[i]["max"])){
+                percentage = SimulationController.items[i]["percentage"];
+            }
+        }
+        float r = Random.Range(0.0f, 100.0f);
+
+        if(r <= percentage){
+            data.isDead = true;
+            data.state = "Death";
+            Animator m_Animator = GetComponent<Animator>();
+            m_Animator.SetBool("IsDead", true);
+            myNavMeshAgent.speed = 0.0f;
+            SimulationController.sick -= 1;
+            SimulationController.dead += 1;
+        }
     }
 }
