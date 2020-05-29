@@ -14,7 +14,8 @@ public class SimulationController : MonoBehaviour
     public GameObject[] agents;
     public static JSONNode items;
     public static bool start = false;
-    float totalTime = 0.0f;
+    public static float totalTime = 0f, time = 0f;
+    public FreeFlyCamera camera;
     
     void Awake()
     {
@@ -29,8 +30,8 @@ public class SimulationController : MonoBehaviour
         recovered = 0;
         CreateAgents(healthy, "Healthy");
         start = true;
-        //camera.enabled = true;
-       // time = float.Parse(timeField.text) * 60.0f;
+        camera.enabled = true;
+        totalTime = float.Parse(timeField.text) * 60.0f;
     }
 
     void CreateAgents(int cant, string state)
@@ -49,7 +50,7 @@ public class SimulationController : MonoBehaviour
 
     void Update()
     {
-        if(start){
+        if((start) && (time <= totalTime)){
             Timer();
         }
         labelHealthy.text = healthy.ToString();
@@ -60,9 +61,9 @@ public class SimulationController : MonoBehaviour
 
     void Timer()
     {
-        totalTime += Time.deltaTime;
-        int minutes = Mathf.FloorToInt(totalTime / 60f);
-        int seconds = Mathf.FloorToInt(totalTime - (minutes * 60));
+        time += Time.deltaTime;
+        int minutes = Mathf.FloorToInt(time / 60f);
+        int seconds = Mathf.FloorToInt(time - (minutes * 60));
 
         string niceTime = string.Format("{00:00}:{01:00}", minutes, seconds);
         labelTime.text = niceTime;

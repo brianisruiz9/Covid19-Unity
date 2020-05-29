@@ -18,11 +18,13 @@ public class AgentController : MonoBehaviour
 {
     public AgentData data;
     NavMeshAgent myNavMeshAgent;
+    Animator m_Animator;
     int value = 0;
     private Image circle;
 
     void Start()
     {
+        m_Animator = GetComponent<Animator>();
         myNavMeshAgent = GetComponent<NavMeshAgent>();
         value = Random.Range(0, SimulationController.points.Length);
 
@@ -35,20 +37,28 @@ public class AgentController : MonoBehaviour
 
     void Update()
     {
-        if(data.state == "Sick"){
-            data.time -= Time.deltaTime;
-            if(data.time <= 0.0f){
-                data.state = "Recovered";
-                circle.color = GetColorRGBA("#0AFF06");
-                SimulationController.recovered += 1;
-                SimulationController.sick -= 1;
+        if(SimulationController.start){
+        
+            if(data.state == "Sick"){
+                data.time -= Time.deltaTime;
+                if(data.time <= 0.0f){
+                    data.state = "Recovered";
+                    circle.color = GetColorRGBA("#0AFF06");
+                    SimulationController.recovered += 1;
+                    SimulationController.sick -= 1;
+                }
             }
-        }
 
-        myNavMeshAgent.SetDestination(SimulationController.points[value].transform.position);
-        float distanceToTarget = Vector3.Distance(transform.position, SimulationController.points[value].transform.position);
-        if(distanceToTarget <= 0.6f){
-            value = Random.Range(0, SimulationController.points.Length);
+            myNavMeshAgent.SetDestination(SimulationController.points[value].transform.position);
+            float distanceToTarget = Vector3.Distance(transform.position, SimulationController.points[value].transform.position);
+            if(distanceToTarget <= 0.6f){
+                value = Random.Range(0, SimulationController.points.Length);
+            }
+
+            if(SimulationController.time >= SimulationController.totalTime){
+                myNavMeshAgent.speed = 0.0f;
+                m_Animator.SetBool("Finished", true);
+            }
         }
     }
 
@@ -88,7 +98,6 @@ public class AgentController : MonoBehaviour
         if(r <= percentage){
             data.isDead = true;
             data.state = "Death";
-            Animator m_Animator = GetComponent<Animator>();
             m_Animator.SetBool("IsDead", true);
             myNavMeshAgent.speed = 0.0f;
             SimulationController.sick -= 1;
