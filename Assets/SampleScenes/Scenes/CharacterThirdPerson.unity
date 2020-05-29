@@ -7834,7 +7834,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Este proyecto es una simulaci\xF3n de Covid-19 para demostrar visualmente
-    como se contagian as personas, es desarrollado en la materia de Desarrollo de
+    como se contagian las personas, es desarrollado en la materia de Desarrollo de
     videojuegos por el estudiante:\n Brianis Ruiz Mendoza."
 --- !u!222 &1823560957
 CanvasRenderer:
@@ -8404,6 +8404,10 @@ PrefabInstance:
     - target: {fileID: 190766, guid: 75c27bf47f501a74fa5723911612c226, type: 3}
       propertyPath: m_Name
       value: BoxSmall
+      objectReference: {fileID: 0}
+    - target: {fileID: 190766, guid: 75c27bf47f501a74fa5723911612c226, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 432898, guid: 75c27bf47f501a74fa5723911612c226, type: 3}
       propertyPath: m_LocalPosition.x
